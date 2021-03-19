@@ -1,15 +1,15 @@
 # clash tun scripts configuration
 
 # cgroup net_cls classid
-BYPASS_CGROUP_CLASSID=114514
+BYPASS_CGROUP_CLASSID=100000
 
 # netfilter mark
-NETFILTER_MARK=114514
+NETFILTER_MARK=100
 
 # iproute2 rule table id
-IPROUTE2_TABLE_ID=114
+IPROUTE2_TABLE_ID=100
 
 # dns redirect
-FORWARD_DNS_REDIRECT=1.0.0.1:53
+FORWARD_DNS_REDIRECT=:53
 
 
