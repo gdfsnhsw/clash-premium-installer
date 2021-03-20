@@ -5,7 +5,7 @@ After=network-online.target nftables.service iptabels.service
 [Service]
 Type=simple
 ExecStartPre=+/lib/clash/setup-cgroup.sh
-ExecStart=/bin/bypass-proxy /bin/clash -d /srv/clash
+ExecStart=/bin/bypass-proxy /bin/clash -d /etc/clash
 
 [Install]
 WantedBy=multi-user.target

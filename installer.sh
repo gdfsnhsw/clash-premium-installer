@@ -45,7 +45,7 @@ function _install() {
     
     assert install -d -m 0755 /etc/default/
     assert install -d -m 0755 /lib/clash/
-    assert install -d -m 0644 /srv/clash/
+    assert install -d -m 0644 /etc/clash/
 
     assert install -m 0755 ./clash /bin/clash
     
@@ -63,7 +63,7 @@ function _install() {
 
     echo "Install successfully"
     echo ""
-    echo "Home directory at /srv/clash"
+    echo "Home directory at /etc/clash"
     echo ""
     echo "All dns traffic will be redirected to :1053"
     echo ""
