@@ -43,8 +43,8 @@ table clash {
         meta cgroup $BYPASS_CGROUP_CLASSID accept
         ip daddr 127.0.0.0/8 accept
         
-        udp dport 53 dnat $FORWARD_DNS_REDIRECT
-        tcp dport 53 dnat $FORWARD_DNS_REDIRECT
+        udp dport 53 dnat 127.0.0.1$FORWARD_DNS_REDIRECT
+        tcp dport 53 dnat 127.0.0.1$FORWARD_DNS_REDIRECT
     }
     
     chain forward-dns-redirect {
