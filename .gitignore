@@ -1,1 +1,4 @@
 /clash
+scripts/setup-tproxy-ipt.sh
+scripts/setup-tproxy-nft1.sh
+scripts/setup-tproxy-nft2.sh

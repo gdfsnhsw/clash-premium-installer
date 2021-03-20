@@ -8,7 +8,7 @@ ip rule del fwmark "$NETFILTER_MARK" lookup "$IPROUTE2_TABLE_ID" > /dev/null 2> 
 ip rule add fwmark "$NETFILTER_MARK" lookup "$IPROUTE2_TABLE_ID"
 
 nft -f - << EOF
-define LOCAL_SUBNET = { 10.0.0.0/8, 127.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 224.0.0.0/4}
+define LOCAL_SUBNET = { 0.0.0.0/8, 10.0.0.0/8, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16, 224.0.0.0/4, 240.0.0.0/4 }
 
 table clash
 flush table clash
@@ -16,9 +16,7 @@ flush table clash
 table clash {
     chain local {
         type route hook output priority 0; policy accept;
-        
         ip protocol != { tcp, udp } accept
-        meta skuid downloader return
 
         meta cgroup $BYPASS_CGROUP_CLASSID accept
         ip daddr \$LOCAL_SUBNET accept
@@ -31,7 +29,6 @@ table clash {
         type filter hook prerouting priority 0; policy accept;
         
         ip protocol != { tcp, udp } accept
-        meta skuid downloader return
     
         iif utun accept
         ip daddr \$LOCAL_SUBNET accept
@@ -41,9 +38,7 @@ table clash {
     
     chain local-dns-redirect {
         type nat hook output priority 0; policy accept;
-        
         ip protocol != { tcp, udp } accept
-        meta skuid downloader return
        
         meta cgroup $BYPASS_CGROUP_CLASSID accept
         ip daddr 127.0.0.0/8 accept
@@ -56,7 +51,6 @@ table clash {
         type nat hook prerouting priority 0; policy accept;
         
         ip protocol != { tcp, udp } accept
-        meta skuid downloader return
         
         udp dport 53 dnat $FORWARD_DNS_REDIRECT
         tcp dport 53 dnat $FORWARD_DNS_REDIRECT

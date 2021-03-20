@@ -58,7 +58,7 @@ function _install() {
     assert install -m 0700 scripts/setup-tun.sh /lib/clash/setup-tun.sh
     assert install -m 0700 scripts/setup-cgroup.sh /lib/clash/setup-cgroup.sh
 
-    assert install -m 0644 scripts/clash.service /lib/systemd/system/clash.service
+    assert install -m 0644 scripts/clash.service /etc/systemd/system/clash.service
     assert install -m 0644 scripts/99-clash.rules /etc/udev/rules.d/99-clash.rules
 
     echo "Install successfully"
@@ -66,7 +66,6 @@ function _install() {
     echo "Home directory at /srv/clash"
     echo ""
     echo "All dns traffic will be redirected to :1053"
-    # echo "Please use clash core's 'tun.dns-hijack' to handle it"
     echo ""
     echo "Use 'systemctl start clash' to start"
     echo "Use 'systemctl enable clash' to enable auto-restart on boot"
@@ -82,7 +81,7 @@ function _uninstall() {
     systemctl disable clash
 
     rm -rf /lib/clash
-    rm -rf /lib/systemd/system/clash.service
+    rm -rf /etc/systemd/system/clash.service
     rm -rf /etc/udev/rules.d/99-clash.rules
     rm -rf /bin/clash
     rm -rf /bin/bypass-proxy-uid
