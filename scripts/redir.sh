@@ -35,9 +35,10 @@ function _setup(){
             type route hook output priority filter;
             ip protocol != { tcp, udp } accept
 
-		    meta skuid root return
+		    meta skuid 1001 return
 
-            ip daddr \$LOCAL_SUBNET return
+            ip daddr \$LOCAL_SUBNET accept
+
             ip protocol { tcp, udp } meta mark set $NETFILTER_MARK accept
         }
 
@@ -45,7 +46,8 @@ function _setup(){
             type filter hook prerouting priority filter;
             ip protocol != { tcp, udp } accept
 
-            ip daddr \$LOCAL_SUBNET return
+            ip daddr \$LOCAL_SUBNET accept
+
             ip protocol tcp mark set $NETFILTER_MARK tproxy to 127.0.0.1$FORWARD_TPROXY_REDIR accept
             ip protocol udp mark set $NETFILTER_MARK tproxy to 127.0.0.1$FORWARD_TPROXY_REDIR accept
         }
@@ -54,7 +56,7 @@ function _setup(){
             type nat hook output priority 0; policy accept;
             ip protocol != { tcp, udp } accept
 
-            meta skuid root return
+            meta skuid 1001 return
 
             meta cgroup $BYPASS_CGROUP_CLASSID accept
             ip daddr 127.0.0.0/8 accept
