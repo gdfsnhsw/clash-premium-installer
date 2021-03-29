@@ -45,7 +45,7 @@ function _install() {
     
     assert install -d -m 0755 /etc/default/
     assert install -d -m 0755 /lib/clash/
-    assert install -d -m 0644 /etc/clash/
+    assert install -d -m 0600 /etc/clash/
 
     assert install -m 0755 ./clash /bin/clash
     
@@ -54,9 +54,9 @@ function _install() {
     assert install -m 0755 scripts/bypass-proxy-pid /bin/bypass-proxy-pid
     assert install -m 0755 scripts/bypass-proxy /bin/bypass-proxy
 
-    assert install -m 0700 scripts/clean-tun.sh /lib/clash/clean-tun.sh
-    assert install -m 0700 scripts/setup-tun.sh /lib/clash/setup-tun.sh
-    assert install -m 0700 scripts/setup-cgroup.sh /lib/clash/setup-cgroup.sh
+    assert install -m 0700 scripts/tun.sh /lib/clash/tun.sh
+    assert install -m 0700 scripts/redir.sh /lib/clash/redir.sh
+    assert install -m 0700 scripts/cgroup.sh /lib/clash/cgroup.sh
 
     assert install -m 0644 scripts/clash.service /etc/systemd/system/clash.service
     assert install -m 0644 scripts/99-clash.rules /etc/udev/rules.d/99-clash.rules
