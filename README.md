@@ -15,12 +15,21 @@ Simple clash premiun core installer with full tun support for Linux.
 3. Download clash core [link](https://github.com/Dreamacro/clash/releases/tag/premium)
 
    ```bash
-   curl -o clash-premium.gz https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.03.10.gz && gzip -d clash-premium.gz && mv clash-premium clash-install/clash
+   wget -O clash-premium.gz https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.03.10.gz && gzip -d clash-premium.gz && mv clash-premium clash-install/clash
+   ```
+
+   or
+
+   ```bash
+   curl -L -o clash-premium.gz https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.03.10.gz && gzip -d clash-premium.gz && mv clash-premium clash-install/clash
    ```
 
 4. Run Installer
 
    ```bash
+   cd clash-install
+   chmod +x install.sh
+
    # install
 
    ./install.sh tun           # transfer TCP and UDP to utun device
@@ -36,7 +45,13 @@ Simple clash premiun core installer with full tun support for Linux.
 5. Dashboard
 
    ```bash
-   curl -o ui.zip https://github.com/Dreamacro/clash-dashboard/archive/gh-pages.zip && unzip ui.zip && mv clash-dashboard-gh-pages /etc/clash/ui
+   wget -O ui.zip https://github.com/Dreamacro/clash-dashboard/archive/gh-pages.zip && unzip ui.zip && mv clash-dashboard-gh-pages /etc/clash/ui
+   ```
+
+   or
+
+   ```bash
+   curl -L -o ui.zip https://github.com/Dreamacro/clash-dashboard/archive/gh-pages.zip && unzip ui.zip && mv clash-dashboard-gh-pages /etc/clash/ui
    ```
 
 ## Credits
