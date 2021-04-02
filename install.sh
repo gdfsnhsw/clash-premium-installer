@@ -54,9 +54,9 @@ function _install() {
     assert install -m 0755 scripts/bypass-proxy-pid /bin/bypass-proxy-pid
     assert install -m 0755 scripts/bypass-proxy /bin/bypass-proxy
 
-    assert install -m 0700 scripts/tun.sh /lib/clash/tun.sh
-    assert install -m 0700 scripts/redir.sh /lib/clash/redir.sh
     assert install -m 0700 scripts/cgroup.sh /lib/clash/cgroup.sh
+
+    assert install -m 0700 scripts/$1.sh /lib/clash/rules.sh
 
     assert install -m 0644 scripts/clash.service /etc/systemd/system/clash.service
     assert install -m 0644 scripts/99-clash.rules /etc/udev/rules.d/99-clash.rules
@@ -77,6 +77,7 @@ function _uninstall() {
     assert_command systemctl
     assert_command rm
 
+    . /lib/clash/rules.sh clean
     systemctl stop clash
     systemctl disable clash
 
@@ -96,18 +97,33 @@ function _uninstall() {
 function _help() {
     echo "Clash Premiun Installer"
     echo ""
-    echo "Usage: ./installer.sh [option]"
+    echo "Usage: ./install.sh [option]"
     echo ""
     echo "Options:"
-    echo "  install      - install clash premiun core"
-    echo "  uninstall    - uninstall installed clash premiun core"
+    echo "  tun         - transfer TCP and UDP to utun device"
+    echo "  tproxy      - TProxy TCP and TProxy UDP"
+    echo "  tproxy-tun  - TProxy TCP and transfer UDP to utun device(not work)"
+    echo "  redir-tun   - Redirect TCP and transfer UDP to utun device"
+    echo "  uninstall   - uninstall installed clash premiun core"
     echo ""
 
     exit 0
 }
 
+function _debug() {
+    assert_command touch
+    echo "Clash Premiun Installer"
+    echo "$1 is $1"
+    touch $1-123.sh
+    exit 0
+}
+
 case "$1" in
-"install") _install;;
-"uninstall") _uninstall;;
+"tun") _install $1;;
+"tproxy") _install $1;;
+"tproxy-tun") _install $1;;
+"redir-tun") _install $1;;
+"uninstall") _uninstall $1;;
+"debug") _debug $1;;
 *) _help;
 esac

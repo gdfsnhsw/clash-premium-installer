@@ -12,6 +12,5 @@ IPROUTE2_TABLE_ID=100
 # dns redirect
 FORWARD_DNS_REDIRECT=:1053
 
-# tproxy (TProxy TCP and TProxy UDP)
-FORWARD_TPROXY_REDIR=:7893
-
+# tproxy (TProxy TCP and TProxy UDP) or Redir (Redirect TCP and TProxy UDP)
+FORWARD_PROXY_REDIRECT=:7893

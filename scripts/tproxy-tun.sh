@@ -33,15 +33,16 @@ function _setup(){
     table clash {
         chain forward {
             type filter hook prerouting priority 0; policy accept;           
-            ip protocol != { tcp, udp } accept        
+            ip protocol != { tcp, udp } accept      
             iif utun accept
-            ip daddr \$LOCAL_SUBNET accept           
-            ip protocol { tcp, udp } mark set $NETFILTER_MARK
+            ip daddr \$LOCAL_SUBNET accept
+            ip protocol tcp tproxy to 127.0.0.1$FORWARD_PROXY_REDIRECT
+            ip protocol udp mark set $NETFILTER_MARK
         }
 
         chain forward-dns-redirect {
-            type nat hook prerouting priority 0; policy accept;           
-            ip protocol != { tcp, udp } accept        
+            type nat hook prerouting priority 0; policy accept;        
+            ip protocol != { tcp, udp } accept       
             ip daddr \$LOCAL_SUBNET tcp dport 53 dnat $FORWARD_DNS_REDIRECT
             ip daddr \$LOCAL_SUBNET udp dport 53 dnat $FORWARD_DNS_REDIRECT
         }
@@ -69,9 +70,9 @@ EOF
 }
 
 function _help() {
-    echo "nftables rule for clash TUN mode"
+    echo "nftables rule for clash TPROXY-TUN mode"
     echo ""
-    echo "Usage: ./tun.sh [option]"
+    echo "Usage: ./tproxy-tun.sh [option]"
     echo ""
     echo "Options:"
     echo "  setup   - setup nft rules"
