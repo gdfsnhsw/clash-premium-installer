@@ -49,7 +49,7 @@ function _install() {
 
     assert install -m 0755 ./clash /bin/clash
     
-    assert install -m 0644 scripts/clash-default /etc/default/clash
+    assert install -m 0644 files/clash-default /etc/default/clash
 
     assert install -m 0755 scripts/bypass-proxy-pid /bin/bypass-proxy-pid
     assert install -m 0755 scripts/bypass-proxy /bin/bypass-proxy
@@ -58,8 +58,8 @@ function _install() {
 
     assert install -m 0700 scripts/$1.sh /lib/clash/rules.sh
 
-    assert install -m 0644 scripts/clash.service /etc/systemd/system/clash.service
-    assert install -m 0644 scripts/99-clash.rules /etc/udev/rules.d/99-clash.rules
+    assert install -m 0644 files/clash.service /etc/systemd/system/clash.service
+    assert install -m 0644 files/99-clash.rules /etc/udev/rules.d/99-clash.rules
 
     echo "Install successfully"
     echo ""
