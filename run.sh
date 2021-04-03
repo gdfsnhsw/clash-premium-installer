@@ -41,7 +41,7 @@ function _core() {
     fi
 
     echo "Get Clash Premium release information"
-    curl -s -o clash_premium_release.json "${url_prefix}${release_info_url}"
+    curl -s -o clash_premium_release.json "${release_info_url}"
 
     if [ ! -f clash_premium_release.json ]; then
         echo "Failed to get Clash Premium release information"
