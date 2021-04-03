@@ -8,13 +8,23 @@ socks-port: 7891
 mixed-port: 7892
 
 # Transparent proxy server port for Linux and macOS (Redirect TCP and TProxy UDP)
-# redir-port: 7893
+redir-port: 7893
 
 # Transparent proxy server port for Linux (TProxy TCP and TProxy UDP)
-tproxy-port: 7893
+# tproxy-port: 7893
 
 allow-lan: true
 
+# This is only applicable when `allow-lan` is `true`
+# '*': bind all IP addresses
+# 192.168.122.11: bind a single IPv4 address
+# "[aaaa::a8aa:ff:fe09:57d8]": bind a single IPv6 address
+# bind-address: '*'
+
+# Clash router working mode
+# rule: rule-based packet routing
+# global: all packets will be forwarded to a single endpoint
+# direct: directly forward the packets to the Internet
 mode: rule
 
 # Clash by default prints logs to STDOUT
@@ -29,23 +39,30 @@ external-controller: 0.0.0.0:9099
 # A relative path to the configuration directory or an absolute path to a
 # directory in which you put some static web resource. Clash core will then
 # serve it at `http://{{external-controller}}/ui`.
-external-ui: "ui"
+external-ui: 'ui'
 
 # Secret for the RESTful API (optional)
 # Authenticate by spedifying HTTP header `Authorization: Bearer ${secret}`
 # ALWAYS set a secret if RESTful API is listening on 0.0.0.0
-secret: "123456"
+secret: '123456'
 
 interface-name: eno2
 
 tun:
-  enable: false
+  enable: true
   stack: system # or gvisor
   dns-hijack:
     - tcp://8.8.8.8:53
     - tcp://8.8.4.4:53
     - udp://8.8.8.8:53
     - udp://8.8.4.4:53
+
+hosts:
+  # Firebase Cloud Messaging
+  'mtalk.google.com': 108.177.125.188
+  # Google Dl
+  'dl.google.com': 180.163.151.161
+  'dl.l.google.com': 180.163.151.161
 
 dns:
   enable: true
@@ -55,11 +72,12 @@ dns:
   # These nameservers are used to resolve the DNS nameserver hostnames below.
   # Specify IP addresses only
   default-nameserver:
-    - 223.5.5.5
-  enhanced-mode: fake-ip # or redir-host
+    - 119.29.29.29
+    - 1.0.0.1
+  enhanced-mode: redir-host # fake-ip
   fake-ip-range: 198.18.0.1/16
-  use-hosts: true # lookup hosts and return IP record
-
+  # use-hosts: true # lookup hosts and return IP record
+  
   # Hostnames in this list will not be resolved with fake IPs
   # i.e. questions to these domain names will always be answered with their
   # real IP addresses
@@ -133,17 +151,33 @@ dns:
     - "+.xboxlive.com"
     - stun.*.*
     - stun.*.*.*
-
+    
   # Supports UDP, TCP, DoT, DoH. You can specify the port to connect to.
   # All DNS questions are sent directly to the nameserver, without proxies
   # involved. Clash answers the DNS question with the first result gathered.
   nameserver:
-    - 223.5.5.5
-
-  fallback:
-    - tls://8.8.8.8:853
-    - https://1.1.1.1/dns-query
-
+    - 119.29.29.29
+    - tls://dns.rubyfish.cn:853 # DNS over TLS
+    - https://1.1.1.1/dns-query # DNS over HTTPS
+        
+  # When `fallback` is present, the DNS server will send concurrent requests
+  # to the servers in this section along with servers in `nameservers`.
+  # The answers from fallback servers are used when the GEOIP country
+  # is not `CN`.
+  # fallback:
+  #   - tcp://1.1.1.1
+  
+  # If IP addresses resolved with servers in `nameservers` are in the specified
+  # subnets below, they are considered invalid and results from `fallback`
+  # servers are used instead.
+  #
+  # IP address resolved with servers in `nameserver` is used when
+  # `fallback-filter.geoip` is true and when GEOIP of the IP address is `CN`.
+  #
+  # If `fallback-filter.geoip` is false, results from `nameserver` nameservers
+  # are always used if not match `fallback-filter.ipcidr`.
+  #
+  # This is a countermeasure against DNS pollution attacks.
   fallback-filter:
     geoip: true
     ipcidr:
@@ -168,7 +202,7 @@ dns:
       - "+.facebook.com"
       - "+.youtube.com"
       - "+.githubusercontent.com"
-
+  
 proxy-providers:
   SUB001:
     type: http
@@ -179,7 +213,7 @@ proxy-providers:
       enable: true
       interval: 600
       url: http://www.gstatic.com/generate_204
-
+ 
 proxy-groups:
   - name: 🚀  Proxy
     type: select
@@ -239,7 +273,7 @@ proxy-groups:
     type: url-test
     use:
       - SUB001
-    url: "http://www.gstatic.com/generate_204"
+    url: 'http://www.gstatic.com/generate_204'
     interval: 500
 
   - name: ⌛  Final
@@ -251,12 +285,12 @@ proxy-groups:
 # 关于 Rule Provider 请查阅：https://lancellc.gitbook.io/clash/clash-config-file/rule-provider
 
 rule-providers:
-  # name: # Provider 名称
-  #   type: http # http 或 file
-  #   behavior: classical # 或 ipcidr、domain
-  #   path: # 文件路径
-  #   url: # 只有当类型为 HTTP 时才可用，您不需要在本地空间中创建新文件。
-  #   interval: # 自动更新间隔，仅在类型为 HTTP 时可用
+# name: # Provider 名称
+#   type: http # http 或 file
+#   behavior: classical # 或 ipcidr、domain
+#   path: # 文件路径
+#   url: # 只有当类型为 HTTP 时才可用，您不需要在本地空间中创建新文件。
+#   interval: # 自动更新间隔，仅在类型为 HTTP 时可用
 
   Unbreak:
     type: http
@@ -271,7 +305,7 @@ rule-providers:
     path: ./RuleSet/Guard/Advertising.yaml
     url: https://ghproxy.com/https://raw.githubusercontent.com/DivineEngine/Profiles/master/Clash/RuleSet/Guard/Advertising.yaml
     interval: 86400
-
+    
   Hijacking:
     type: http
     behavior: classical
@@ -321,21 +355,21 @@ rule-providers:
     path: ./RuleSet/Extra/Game/Steam.yaml
     url: https://ghproxy.com/https://raw.githubusercontent.com/DivineEngine/Profiles/master/Clash/RuleSet/Extra/Game/Steam.yaml
     interval: 86400
-
+  
   Global:
     type: http
     behavior: classical
     path: ./RuleSet/Global.yaml
     url: https://ghproxy.com/https://raw.githubusercontent.com/DivineEngine/Profiles/master/Clash/RuleSet/Global.yaml
     interval: 86400
-
+    
   IP-Blackhole:
     type: http
     behavior: ipcidr
     path: ./RuleSet/Extra/IP-Blackhole.yaml
     url: https://ghproxy.com/https://raw.githubusercontent.com/DivineEngine/Profiles/master/Clash/RuleSet/Extra/IP-Blackhole.yaml
     interval: 86400
-
+    
   China:
     type: http
     behavior: classical
@@ -349,25 +383,27 @@ rule-providers:
     path: ./RuleSet/Extra/ChinaIP.yaml
     url: https://ghproxy.com/https://raw.githubusercontent.com/DivineEngine/Profiles/master/Clash/RuleSet/Extra/ChinaIP.yaml
     interval: 86400
-
+    
 rules:
   # SrcIPCIDR
   - PROCESS-NAME,qbittorrent-nox-bin,DIRECT
-
+  - SRC-IP-CIDR,10.10.10.10/32,DIRECT
+  - SRC-IP-CIDR,10.10.10.100/32,DIRECT
+  
   # Unbreak
   - RULE-SET,Unbreak,🎯  Direct
-
+  
   # Hijacking
   - RULE-SET,Hijacking,🛑 Block
 
   # Advertising
   - RULE-SET,Advertising,🛑 Block
-
+    
   # Global Area Network
-
+  
   # Steam
   - RULE-SET,Steam,🎮  Steam
-
+  
   # (Streaming Media)
   - RULE-SET,YouTube,📺  Youtube
   - RULE-SET,Netflix,🎬  Netflix
@@ -391,7 +427,7 @@ rules:
   - IP-CIDR,192.168.0.0/16,DIRECT
   - IP-CIDR,224.0.0.0/4,DIRECT
   - IP-CIDR,fe80::/10,DIRECT
-
+  
   # （可选）使用来自 ipipdotnet 的 ChinaIP 以解决数据不准确的问题，使用 ChinaIP.yaml 时可禁用下列直至（包括）「GEOIP,CN」规则
   # - RULE-SET,ChinaIP,🎯  Direct
   # GeoIP China

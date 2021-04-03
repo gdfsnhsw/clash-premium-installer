@@ -14,6 +14,10 @@ Simple clash premiun core installer with full tun support for Linux.
 
 3. Download clash core [link](https://github.com/Dreamacro/clash/releases/tag/premium)
 
+   Go step 4
+
+   or
+
    ```bash
    wget -O clash-premium.gz https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.03.10.gz && gzip -d clash-premium.gz && mv clash-premium clash-install/clash
    ```
@@ -21,7 +25,7 @@ Simple clash premiun core installer with full tun support for Linux.
    or
 
    ```bash
-   curl -L -o clash-premium.gz https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.03.10.gz && gzip -d clash-premium.gz && mv clash-premium clash-install/clash
+   curl -L -# -o clash-premium.gz https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.03.10.gz && gzip -d clash-premium.gz && mv clash-premium clash-install/clash
    ```
 
 4. Run Installer
@@ -29,6 +33,9 @@ Simple clash premiun core installer with full tun support for Linux.
    ```bash
    cd clash-install
    chmod +x install.sh
+
+   # core
+   ./install.sh core          # Download latest clash premium core
 
    # install
 

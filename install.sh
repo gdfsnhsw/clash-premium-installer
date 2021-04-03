@@ -18,6 +18,48 @@ function assert_command() {
     fi
 }
 
+function _core() {
+    case "$(uname -ms | tr ' ' '_' | tr '[A-Z]' '[a-z]')" in
+    "linux_x86_64") 
+        AARCH="linux-amd64"
+        ;;
+    "linux_aarch64")
+        AARCH="linux-armv8"
+        ;;
+    *)
+        echo "Not support platform"
+        exit 1
+        ;;
+    esac
+
+    echo "Get Clash Premium release information"
+    curl -s -o clash_premium_release.json https://api.github.com/repos/Dreamacro/clash/releases/tags/premium
+
+    if [ ! -f clash_premium_release.json ]; then
+        echo "Failed to get Clash Premium release information"
+        exit 1
+    fi
+
+    remote_download_url=$(jq ".assets[${i}].browser_download_url" clash_premium_release.json | tr -d '"' | grep -m1 ${AARCH})
+    if [ "${remote_download_url}" == "" ]; then
+        echo "No compatible Clash Premium for your platform"
+        exit 1
+    fi
+
+    echo "Start download Clash Premium from ${remote_download_url}..."
+    curl -L -# -o clash-premium.gz "${remote_download_url}"
+    if [ ! -f clash-premium.gz ]; then
+        echo "Failed to download Clash Premium"
+        echo "Please download and upload it to current directory manually"
+        exit 1
+    fi
+
+    gzip -d clash-premium.gz
+    mv clash-premium clash
+    echo "Clash Premium has been downloaded successfully "
+    exit 1
+}
+
 function _install() {
     assert_command install
     assert_command nft
@@ -58,7 +100,12 @@ function _install() {
 
     assert install -m 0700 scripts/$1.sh /lib/clash/rules.sh
 
-    assert install -m 0644 files/clash.service /etc/systemd/system/clash.service
+    if [[ "$1" =~ "tun" ]]; then
+        assert install -m 0644 files/clash.service /etc/systemd/system/clash.service
+    else
+        assert install -m 0644 files/clash-notun.service /etc/systemd/system/clash.service
+    fi
+
     assert install -m 0644 files/99-clash.rules /etc/udev/rules.d/99-clash.rules
 
     echo "Install successfully"
@@ -110,20 +157,12 @@ function _help() {
     exit 0
 }
 
-function _debug() {
-    assert_command touch
-    echo "Clash Premiun Installer"
-    echo "$1 is $1"
-    touch $1-123.sh
-    exit 0
-}
-
 case "$1" in
+"core") _core;;
 "tun") _install $1;;
 "tproxy") _install $1;;
 "tproxy-tun") _install $1;;
 "redir-tun") _install $1;;
 "uninstall") _uninstall $1;;
-"debug") _debug $1;;
 *) _help;
 esac
