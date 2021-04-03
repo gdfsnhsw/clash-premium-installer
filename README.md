@@ -4,7 +4,7 @@ Simple clash premiun core installer with full tun support for Linux.
 
 ## Usage
 
-1. Install dependencies **git**, **nftables**, **iproute2**
+1. Install dependencies **git**, **nftables**, **iproute2**, **jq**
 
 2. Clone repository
 
@@ -35,11 +35,12 @@ Simple clash premiun core installer with full tun support for Linux.
    chmod +x install.sh
 
    # core
-   ./install.sh core          # Download latest clash premium core
+   ./install.sh core          # Download latest clash premium
+   ./install.sh core_proxy    # Download latest clash premium with proxy
 
    # install
 
-   ./install.sh tun           # transfer TCP and UDP to utun device
+   ./install.sh tun           # Transfer TCP and UDP to utun device
    ./install.sh tproxy        # TProxy TCP and TProxy UDP
    ./install.sh tproxy-tun    # TProxy TCP and transfer UDP to utun device(not work, need help)
    ./install.sh redir-tun     # Redirect TCP and transfer UDP to utun device

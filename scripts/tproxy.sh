@@ -67,7 +67,7 @@ EOF
 }
 
 function _help() {
-    echo "iptables rule for clash TPROXY mode"
+    echo "nftables rule for clash TPROXY mode"
     echo ""
     echo "Usage: ./tproxy.sh [option]"
     echo ""

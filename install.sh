@@ -32,8 +32,15 @@ function _core() {
         ;;
     esac
 
+    url_prefix=""
+    release_info_url="https://api.github.com/repos/Dreamacro/clash/releases/tags/premium"
+
+    if [[ "$1" =~ "proxy" ]]; then
+        url_prefix = "https://ghproxy.com/"
+    fi
+
     echo "Get Clash Premium release information"
-    curl -s -o clash_premium_release.json https://api.github.com/repos/Dreamacro/clash/releases/tags/premium
+    curl -s -o clash_premium_release.json "${url_prefix}${release_info_url}"
 
     if [ ! -f clash_premium_release.json ]; then
         echo "Failed to get Clash Premium release information"
@@ -47,7 +54,7 @@ function _core() {
     fi
 
     echo "Start download Clash Premium from ${remote_download_url}..."
-    curl -L -# -o clash-premium.gz "${remote_download_url}"
+    curl -L -# -o clash-premium.gz "${url_prefix}${remote_download_url}"
     if [ ! -f clash-premium.gz ]; then
         echo "Failed to download Clash Premium"
         echo "Please download and upload it to current directory manually"
@@ -102,11 +109,10 @@ function _install() {
 
     if [[ "$1" =~ "tun" ]]; then
         assert install -m 0644 files/clash.service /etc/systemd/system/clash.service
+        assert install -m 0644 files/99-clash.rules /etc/udev/rules.d/99-clash.rules
     else
         assert install -m 0644 files/clash-notun.service /etc/systemd/system/clash.service
     fi
-
-    assert install -m 0644 files/99-clash.rules /etc/udev/rules.d/99-clash.rules
 
     echo "Install successfully"
     echo ""
@@ -147,7 +153,9 @@ function _help() {
     echo "Usage: ./install.sh [option]"
     echo ""
     echo "Options:"
-    echo "  tun         - transfer TCP and UDP to utun device"
+    echo "  core        - Download latest clash premium"
+    echo "  core_proxy  - Download latest clash premium with proxy"
+    echo "  tun         - Transfer TCP and UDP to utun device"
     echo "  tproxy      - TProxy TCP and TProxy UDP"
     echo "  tproxy-tun  - TProxy TCP and transfer UDP to utun device(not work)"
     echo "  redir-tun   - Redirect TCP and transfer UDP to utun device"
@@ -158,7 +166,8 @@ function _help() {
 }
 
 case "$1" in
-"core") _core;;
+"core") _core $1;;
+"core_proxy") _core $1;;
 "tun") _install $1;;
 "tproxy") _install $1;;
 "tproxy-tun") _install $1;;
