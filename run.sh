@@ -32,11 +32,12 @@ function _core() {
         ;;
     esac
 
-    url_prefix=""
     release_info_url="https://api.github.com/repos/Dreamacro/clash/releases/tags/premium"
 
     if [[ "$1" =~ "proxy" ]]; then
         url_prefix = "https://ghproxy.com/"
+    else
+        url_prefix = ""
     fi
 
     echo "Get Clash Premium release information"
@@ -150,7 +151,7 @@ function _uninstall() {
 function _help() {
     echo "Clash Premiun Installer"
     echo ""
-    echo "Usage: ./install.sh [option]"
+    echo "Usage: ./run.sh [option]"
     echo ""
     echo "Options:"
     echo "  core        - Download latest clash premium"

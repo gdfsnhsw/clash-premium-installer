@@ -32,22 +32,22 @@ Simple clash premiun core installer with full tun support for Linux.
 
    ```bash
    cd clash-install
-   chmod +x install.sh
+   chmod +x run.sh
 
    # core
-   ./install.sh core          # Download latest clash premium
-   ./install.sh core_proxy    # Download latest clash premium with proxy
+   ./run.sh core          # Download latest clash premium
+   ./run.sh core_proxy    # Download latest clash premium with proxy
 
    # install
 
-   ./install.sh tun           # Transfer TCP and UDP to utun device
-   ./install.sh tproxy        # TProxy TCP and TProxy UDP
-   ./install.sh tproxy-tun    # TProxy TCP and transfer UDP to utun device(not work, need help)
-   ./install.sh redir-tun     # Redirect TCP and transfer UDP to utun device
+   ./run.sh tun           # Transfer TCP and UDP to utun device
+   ./run.sh tproxy        # TProxy TCP and TProxy UDP
+   ./run.sh tproxy-tun    # TProxy TCP and transfer UDP to utun device(not work, need help)
+   ./run.sh redir-tun     # Redirect TCP and transfer UDP to utun device
 
    # uninstall
 
-   ./install.sh uninstall
+   ./run.sh uninstall
    ```
 
 5. Dashboard
