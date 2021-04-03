@@ -35,9 +35,9 @@ function _core() {
     release_info_url="https://api.github.com/repos/Dreamacro/clash/releases/tags/premium"
 
     if [[ "$1" =~ "proxy" ]]; then
-        url_prefix = "https://ghproxy.com/"
+        url_prefix="https://ghproxy.com/"
     else
-        url_prefix = ""
+        url_prefix=""
     fi
 
     echo "Get Clash Premium release information"
