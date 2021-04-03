@@ -59,7 +59,7 @@ Simple clash premiun core installer with full tun support for Linux.
    or
 
    ```bash
-   curl -L -o ui.zip https://github.com/Dreamacro/clash-dashboard/archive/gh-pages.zip && unzip ui.zip && mv clash-dashboard-gh-pages /etc/clash/ui
+   curl -L -# -o ui.zip https://github.com/Dreamacro/clash-dashboard/archive/gh-pages.zip && unzip ui.zip && mv clash-dashboard-gh-pages /etc/clash/ui
    ```
 
 ## Credits
