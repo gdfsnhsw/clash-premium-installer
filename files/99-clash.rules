@@ -1,2 +1,2 @@
-SUBSYSTEM=="net",ENV{INTERFACE}=="utun",ACTION=="add",RUN+="/bin/sudo /lib/clash/rules.sh setup"
-SUBSYSTEM=="net",ENV{INTERFACE}=="utun",ACTION=="remove",RUN+="/bin/sudo /lib/clash/rules.sh clean"
+SUBSYSTEM=="net",ENV{INTERFACE}=="utun",ACTION=="add",RUN+="/lib/clash/rules.sh setup"
+SUBSYSTEM=="net",ENV{INTERFACE}=="utun",ACTION=="remove",RUN+="/lib/clash/rules.sh clean"
