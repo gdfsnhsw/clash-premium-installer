@@ -22,6 +22,7 @@ function _download() {
     assert_command curl
     assert_command gzip
     assert_command unzip
+    assert_command mv
 
     case "$(uname -ms | tr ' ' '_' | tr '[A-Z]' '[a-z]')" in
     "linux_x86_64") 
@@ -66,7 +67,7 @@ function _download() {
         exit 1
     fi
     assert gzip -d clash-premium.gz
-    assert install clash-premium clash
+    assert mv clash-premium clash
 
     clash_dashboard_download_url="https://github.com/Dreamacro/clash-dashboard/archive/gh-pages.zip"
     echo "Start download Clash Dashboard from ${clash_dashboard_download_url}"
@@ -77,7 +78,7 @@ function _download() {
         exit 1
     fi
     assert unzip ui.zip
-    assert install -d clash-dashboard-gh-pages ui
+    assert mv clash-dashboard-gh-pages ui
 
     echo "Clash Premium core & dashboard have been downloaded successfully "
     exit 1
@@ -185,8 +186,8 @@ function _help() {
     echo "Usage: ./run.sh [option]"
     echo ""
     echo "Options:"
-    echo "  core        - Download latest clash premium"
-    echo "  core_proxy  - Download latest clash premium with proxy"
+    echo "  dl          - Download latest clash premium"
+    echo "  dl_proxy    - Download latest clash premium with proxy"
     echo "  tun         - Transfer TCP and UDP to utun device"
     echo "  tproxy      - TProxy TCP and TProxy UDP"
     echo "  tproxy-tun  - TProxy TCP and transfer UDP to utun device(not work)"
