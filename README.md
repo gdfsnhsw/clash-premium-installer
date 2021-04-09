@@ -35,8 +35,8 @@ Simple clash premiun core installer with full tun support for Linux.
    chmod +x run.sh
 
    # core
-   ./run.sh core          # Download latest clash premium
-   ./run.sh core_proxy    # Download latest clash premium with proxy
+   ./run.sh dl            # Download latest clash premium
+   ./run.sh dl_proxy      # Download latest clash premium with proxy
 
    # install
 
