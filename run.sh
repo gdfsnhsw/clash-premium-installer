@@ -132,7 +132,11 @@ function _install() {
 
     if [ ! -f "/etc/clash/config.yaml" ];then
         assert install -m 0600 files/config.yaml /etc/clash/config.yaml
+    else
+        FORWARD_DNS_REDIRECT=$(yq eval '.dns.listen' config.yaml | awk -F':' '{ print int($2) }')
+        FORWARD_PROXY_REDIRECT=$(yq eval '.redir-port' config.yaml
     fi
+
 
     if [[ ! "$1" =~ "tun" ]]; then
         sed -i '/^ExecStart=/a ExecStopPost=\/lib\/clash/rules.sh clean' /etc/systemd/system/clash.service
