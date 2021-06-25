@@ -78,7 +78,7 @@ function _download() {
         exit 1
     fi
     assert unzip ui.zip
-    assert mv clash-dashboard-gh-pages ui
+    assert mv -f -T clash-dashboard-gh-pages ui
 
     echo "Clash Premium core & dashboard have been downloaded successfully "
     exit 1
@@ -128,15 +128,26 @@ function _install() {
 
     assert install -m 0644 files/clash.service /etc/systemd/system/clash.service
     assert install -m 0644 files/99-clash.rules /etc/udev/rules.d/99-clash.rules
-    assert install -d -m 0600 ui /etc/clash/ui
+    assert mv -f -T ui /etc/clash/ui
 
     if [ ! -f "/etc/clash/config.yaml" ];then
         assert install -m 0600 files/config.yaml /etc/clash/config.yaml
-    else
-        FORWARD_DNS_REDIRECT=$(yq eval '.dns.listen' config.yaml | awk -F':' '{ print int($2) }')
-        FORWARD_PROXY_REDIRECT=$(yq eval '.redir-port' config.yaml
     fi
 
+    FORWARD_DNS_REDIRECT=$(yq eval '.dns.listen' /etc/clash/config.yaml | awk -F':' '{ print int($2) }')
+    FORWARD_PROXY_REDIRECT=$(yq eval '.redir-port' /etc/clash/config.yaml)
+
+    if [[ ! "$1" =~ "tproxy" ]]; then
+        FORWARD_PROXY_REDIRECT=$(yq eval '.tproxy-port' /etc/clash/config.yaml)
+    elif [[ ! "$1" =~ "redir" ]]; then
+        FORWARD_PROXY_REDIRECT=$(yq eval '.redir-port' /etc/clash/config.yaml)
+    fi
+
+    if [[ FORWARD_PROXY_REDIRECT != null ]];then
+        sed 
+    else
+        echo "config 文件需要设置tproxy-port或者redir-port"
+    if
 
     if [[ ! "$1" =~ "tun" ]]; then
         sed -i '/^ExecStart=/a ExecStopPost=\/lib\/clash/rules.sh clean' /etc/systemd/system/clash.service
