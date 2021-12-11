@@ -150,7 +150,7 @@ function _install() {
     if
 
     if [[ ! "$1" =~ "tun" ]]; then
-        sed -i '/^ExecStart=/a ExecStopPost=\/lib\/clash/rules.sh clean' /etc/systemd/system/clash.service
+        sed -i '/^ExecStart=/a ExecStopPost=\/lib\/clash\/rules.sh clean' /etc/systemd/system/clash.service
         sed -i '/^ExecStart=/a ExecStartPost=\/lib\/clash\/rules.sh setup' /etc/systemd/system/clash.service
         systemctl daemon-reload
     fi
@@ -205,8 +205,6 @@ function _help() {
     echo "  dl_proxy    - Download latest clash premium & dashboard with proxy"
     echo "  tun         - Transfer TCP and UDP to utun device"
     echo "  tproxy      - TProxy TCP and TProxy UDP"
-    echo "  tproxy-tun  - TProxy TCP and transfer UDP to utun device(not work)"
-    echo "  redir-tun   - Redirect TCP and transfer UDP to utun device"
     echo "  uninstall   - uninstall installed clash premiun core"
     echo ""
 
@@ -218,8 +216,6 @@ case "$1" in
 "dl_proxy") _download $1;;
 "tun") _install $1;;
 "tproxy") _install $1;;
-"tproxy-tun") _install $1;;
-"redir-tun") _install $1;;
 "uninstall") _uninstall $1;;
 *) _help;
 esac
