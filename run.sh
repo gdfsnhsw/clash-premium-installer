@@ -147,7 +147,7 @@ function _install() {
         sed -i "s/FORWARD_PROXY_REDIRECT=:\([0-9]*\)/FORWARD_PROXY_REDIRECT=$FORWARD_PROXY_REDIRECT/" /etc/default/clash
     else
         echo "config 文件需要设置tproxy-port或者redir-port"
-    if
+    fi
 
     if [[ ! "$1" =~ "tun" ]]; then
         sed -i '/^ExecStart=/a ExecStopPost=\/lib\/clash\/rules.sh clean' /etc/systemd/system/clash.service
